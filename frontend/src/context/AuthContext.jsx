@@ -1,66 +1,78 @@
-import { createContext, useState, useEffect, useCallback } from 'react';
-import { authService } from '../services/authService';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
+import authService from '../services/authService'
 
-export const AuthContext = createContext(null);
+const AuthContext = createContext(null)
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
+  const [token, setToken] = useState(localStorage.getItem('washhub_token'))
+  const [loading, setLoading] = useState(true)
 
-  const fetchUser = useCallback(async () => {
-    try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setLoading(false);
-        return;
-      }
-      const response = await authService.getMe();
-      setUser(response.data);
-    } catch {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      setUser(null);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
+  // Restore user from localStorage on mount
   useEffect(() => {
-    fetchUser();
-  }, [fetchUser]);
-
-  const login = async (email, password) => {
-    const response = await authService.login(email, password);
-    localStorage.setItem('token', response.data.token);
-    setUser(response.data.user);
-    return response;
-  };
-
-  const logout = async () => {
-    try {
-      await authService.logout();
-    } catch {
-      // Ignore errors during logout
-    } finally {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      setUser(null);
+    const storedUser = localStorage.getItem('washhub_user')
+    if (storedUser && token) {
+      try {
+        setUser(JSON.parse(storedUser))
+      } catch {
+        localStorage.removeItem('washhub_user')
+      }
     }
-  };
+    setLoading(false)
+  }, [token])
 
-  const hasPermission = (permission) => {
-    if (!user || !user.permissions) return false;
-    return user.permissions.includes(permission);
-  };
+  const login = useCallback(async (email, password) => {
+    const response = await authService.login(email, password)
+    const { user: userData, token: authToken } = response.data
 
-  const hasRole = (role) => {
-    if (!user || !user.roles) return false;
-    return user.roles.some((r) => r.name === role);
-  };
+    localStorage.setItem('washhub_token', authToken)
+    localStorage.setItem('washhub_user', JSON.stringify(userData))
 
-  return (
-    <AuthContext.Provider value={{ user, loading, login, logout, hasPermission, hasRole, fetchUser }}>
-      {children}
-    </AuthContext.Provider>
-  );
+    setToken(authToken)
+    setUser(userData)
+
+    return userData
+  }, [])
+
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout()
+    } catch {
+      // Proceed even if API call fails
+    } finally {
+      localStorage.removeItem('washhub_token')
+      localStorage.removeItem('washhub_user')
+      setToken(null)
+      setUser(null)
+    }
+  }, [])
+
+  const updateUser = useCallback((updatedUser) => {
+    setUser(updatedUser)
+    localStorage.setItem('washhub_user', JSON.stringify(updatedUser))
+  }, [])
+
+  const isAuthenticated = Boolean(token && user)
+
+  const value = {
+    user,
+    token,
+    loading,
+    isAuthenticated,
+    login,
+    logout,
+    updateUser,
+  }
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
+
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider')
+  }
+  return context
+}
+
+export default AuthContext
