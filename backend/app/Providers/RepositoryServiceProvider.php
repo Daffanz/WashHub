@@ -5,8 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
+use App\Repositories\Interfaces\PermissionRepositoryInterface;
 use App\Repositories\Implementations\UserRepository;
 use App\Repositories\Implementations\RoleRepository;
+use App\Repositories\Implementations\PermissionRepository;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,7 @@ class RepositoryServiceProvider extends ServiceProvider
     protected array $repositories = [
         UserRepositoryInterface::class => UserRepository::class,
         RoleRepositoryInterface::class => RoleRepository::class,
+        PermissionRepositoryInterface::class => PermissionRepository::class,
     ];
 
     /**

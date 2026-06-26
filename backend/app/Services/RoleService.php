@@ -112,21 +112,10 @@ class RoleService
     }
 
     /**
-     * Get all permissions grouped.
+     * Get all permissions (for assignment to roles).
      */
     public function getAllPermissions(): Collection
     {
-        return Permission::orderBy('group')->orderBy('name')->get();
-    }
-
-    /**
-     * Get permissions grouped by module.
-     */
-    public function getPermissionsGrouped(): array
-    {
-        return Permission::orderBy('name')
-            ->get()
-            ->groupBy('group')
-            ->toArray();
+        return Permission::orderBy('name')->get();
     }
 }

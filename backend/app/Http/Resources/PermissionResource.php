@@ -15,9 +15,11 @@ class PermissionResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'group' => $this->group,
             'description' => $this->description,
             'guard_name' => $this->guard_name,
+            'roles_count' => $this->whenCounted('roles'),
+            'created_at' => $this->created_at?->toISOString(),
+            'updated_at' => $this->updated_at?->toISOString(),
         ];
     }
 }
