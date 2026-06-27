@@ -5,63 +5,52 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\UserResource;
-use App\Services\AuthService;
+use App\Models\User;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(
-        protected AuthService $authService
-    ) {}
-
-    /**
-     * Login user and return token.
-     */
     public function login(LoginRequest $request): JsonResponse
     {
-        try {
-            $result = $this->authService->login(
-                $request->validated('email'),
-                $request->validated('password')
-            );
+        $user = User::where('email', $request->email)->first();
 
-            return $this->successResponse([
-                'user' => new UserResource($result['user']),
-                'token' => $result['token'],
-            ], 'Login successful');
-        } catch (ValidationException $e) {
-            return $this->errorResponse(
-                $e->getMessage(),
-                422,
-                $e->errors()
-            );
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
         }
+
+        if (!$user->is_active) {
+            throw ValidationException::withMessages([
+                'email' => ['Your account has been deactivated. Please contact administrator.'],
+            ]);
+        }
+
+        $user->tokens()->delete();
+        $token = $user->createToken('auth-token')->plainTextToken;
+
+        return $this->successResponse([
+            'user' => new UserResource($user->load('roles.permissions')),
+            'token' => $token,
+        ], 'Login successful');
     }
 
-    /**
-     * Logout user.
-     */
     public function logout(Request $request): JsonResponse
     {
-        $this->authService->logout($request->user());
-
+        $request->user()->tokens()->delete();
         return $this->successResponse(null, 'Logged out successfully');
     }
 
-    /**
-     * Get authenticated user.
-     */
     public function me(Request $request): JsonResponse
     {
-        $user = $this->authService->getAuthenticatedUser($request->user());
-
         return $this->successResponse(
-            new UserResource($user),
+            new UserResource($request->user()->load('roles.permissions')),
             'User retrieved successfully'
         );
     }

@@ -1,0 +1,2253 @@
+{
+  "info": {
+    "_postman_id": "d6c6a9e2-5b8f-4c3a-9d1e-7f8b0a2c4e6f",
+    "name": "WashHub Backend",
+    "description": "Complete API collection for WashHub Backend",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "" },
+    { "key": "token", "value": "" },
+    { "key": "user_id", "value": "" },
+    { "key": "role_id", "value": "" },
+    { "key": "permission_id", "value": "" },
+    { "key": "kategori_id", "value": "" },
+    { "key": "bahan_baku_id", "value": "" },
+    { "key": "mesin_id", "value": "" },
+    { "key": "jenis_layanan_id", "value": "" },
+    { "key": "komposisi_id", "value": "" },
+    { "key": "outlet_id", "value": "" },
+    { "key": "supplier_id", "value": "" },
+    { "key": "po_id", "value": "" },
+    { "key": "po_item_id", "value": "" },
+    { "key": "receiving_id", "value": "" },
+    { "key": "distribution_id", "value": "" },
+    { "key": "stock_mutasi_id", "value": "" },
+    { "key": "minimum_stock_id", "value": "" },
+    { "key": "status_id", "value": "" },
+    { "key": "notification_id", "value": "" }
+  ],
+  "item": [
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456701",
+      "name": "Auth",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456702",
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"it@washhub.com\", \"password\": \"password\"}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "login"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "  pm.environment.set('token', jsonData.data.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456703",
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "logout"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456704",
+          "name": "Get Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/me",
+              "host": ["{{base_url}}"],
+              "path": ["api", "me"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456710",
+      "name": "Dashboard",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456711",
+          "name": "Stats",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/dashboard/stats",
+              "host": ["{{base_url}}"],
+              "path": ["api", "dashboard", "stats"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456720",
+      "name": "User Management",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456721",
+          "name": "Users",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456722",
+              "name": "List Users",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users"],
+                  "query": [
+                    { "key": "search", "value": "", "disabled": true },
+                    { "key": "is_active", "value": "", "disabled": true },
+                    { "key": "role", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('user_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456723",
+              "name": "Get User",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/{{user_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "{{user_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456724",
+              "name": "Create User",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"Test User\", \"email\": \"testuser@washhub.com\", \"password\": \"password123\", \"role\": \"Tim Pengadaan\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('user_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456725",
+              "name": "Update User",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"Test User Updated\", \"email\": \"testuser@washhub.com\", \"role\": \"Tim Pengadaan\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/users/{{user_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "{{user_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456726",
+              "name": "Delete User",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/users/{{user_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "users", "{{user_id}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456730",
+          "name": "Roles",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456731",
+              "name": "List Roles",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/roles",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "roles"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.length > 0) {",
+                      "  pm.environment.set('role_id', jsonData.data[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456732",
+              "name": "Get Role",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/roles/{{role_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "roles", "{{role_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456733",
+              "name": "Create Role",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"Test Role\", \"description\": \"Test role description\", \"permissions\": []}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/roles",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "roles"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('role_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456734",
+              "name": "Update Role",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"Test Role Updated\", \"description\": \"Updated description\"}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/roles/{{role_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "roles", "{{role_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456735",
+              "name": "Delete Role",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/roles/{{role_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "roles", "{{role_id}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456740",
+          "name": "Permissions",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456741",
+              "name": "List Permissions",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/permissions",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "permissions"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.length > 0) {",
+                      "  pm.environment.set('permission_id', jsonData.data[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456742",
+              "name": "Create Permission",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"test-permission\", \"group\": \"testing\", \"description\": \"Test permission\"}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/permissions",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "permissions"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456743",
+              "name": "Get Permission",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/permissions/{{permission_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "permissions", "{{permission_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456744",
+              "name": "Update Permission",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"name\": \"test-permission-updated\", \"group\": \"testing\", \"description\": \"Updated\"}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/permissions/{{permission_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "permissions", "{{permission_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456745",
+              "name": "Delete Permission",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/permissions/{{permission_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "permissions", "{{permission_id}}"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456800",
+      "name": "Master Data",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456810",
+          "name": "Kategori Bahan",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456811",
+              "name": "List Kategori Bahan",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/kategori-bahan",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "kategori-bahan"],
+                  "query": [
+                    { "key": "search", "value": "", "disabled": true },
+                    { "key": "is_active", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('kategori_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456812",
+              "name": "List Active Kategori",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/kategori-bahan/active",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "kategori-bahan", "active"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456813",
+              "name": "Get Kategori Bahan",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/kategori-bahan/{{kategori_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "kategori-bahan", "{{kategori_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456814",
+              "name": "Create Kategori Bahan",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"nama\": \"Deterjen\", \"deskripsi\": \"Kategori deterjen\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/kategori-bahan",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "kategori-bahan"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('kategori_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456815",
+              "name": "Update Kategori Bahan",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"nama\": \"Deterjen Updated\", \"deskripsi\": \"Updated\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/kategori-bahan/{{kategori_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "kategori-bahan", "{{kategori_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456816",
+              "name": "Delete Kategori Bahan",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/kategori-bahan/{{kategori_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "kategori-bahan", "{{kategori_id}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456820",
+          "name": "Bahan Baku",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456821",
+              "name": "List Bahan Baku",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/bahan-baku",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "bahan-baku"],
+                  "query": [
+                    { "key": "search", "value": "", "disabled": true },
+                    { "key": "kategori_bahan_id", "value": "", "disabled": true },
+                    { "key": "is_active", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('bahan_baku_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456822",
+              "name": "List by Kategori",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/bahan-baku/by-kategori/{{kategori_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "bahan-baku", "by-kategori", "{{kategori_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456823",
+              "name": "Get Bahan Baku",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/bahan-baku/{{bahan_baku_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "bahan-baku", "{{bahan_baku_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456824",
+              "name": "Create Bahan Baku",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kategori_bahan_id\": \"{{kategori_id}}\", \"nama\": \"Deterjen Bubuk\", \"satuan\": \"kg\", \"stok_minimum\": 10, \"harga_satuan\": 15000, \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/bahan-baku",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "bahan-baku"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('bahan_baku_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456825",
+              "name": "Update Bahan Baku",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kategori_bahan_id\": \"{{kategori_id}}\", \"nama\": \"Deterjen Bubuk Updated\", \"satuan\": \"kg\", \"stok_minimum\": 5, \"harga_satuan\": 14000, \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/bahan-baku/{{bahan_baku_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "bahan-baku", "{{bahan_baku_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456826",
+              "name": "Delete Bahan Baku",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/bahan-baku/{{bahan_baku_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "bahan-baku", "{{bahan_baku_id}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456830",
+          "name": "Mesin",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456831",
+              "name": "List Mesin",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mesin",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "mesin"],
+                  "query": [
+                    { "key": "search", "value": "", "disabled": true },
+                    { "key": "outlet_id", "value": "", "disabled": true },
+                    { "key": "status_id", "value": "", "disabled": true },
+                    { "key": "is_active", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('mesin_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456833",
+              "name": "Get Mesin",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mesin/{{mesin_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "mesin", "{{mesin_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456834",
+              "name": "Create Mesin",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"MCH-001\", \"nama\": \"Mesin Cuci 10kg\", \"merek\": \"LG\", \"kapasitas\": 10, \"satuan_kapasitas\": \"kg\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mesin",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "mesin"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('mesin_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456835",
+              "name": "Update Mesin",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"MCH-001\", \"nama\": \"Mesin Cuci 10kg Updated\", \"merek\": \"LG\", \"kapasitas\": 12, \"satuan_kapasitas\": \"kg\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/mesin/{{mesin_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "mesin", "{{mesin_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456836",
+              "name": "Delete Mesin",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/mesin/{{mesin_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "mesin", "{{mesin_id}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456840",
+          "name": "Jenis Layanan",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456841",
+              "name": "List Jenis Layanan",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/jenis-layanan",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "jenis-layanan"],
+                  "query": [
+                    { "key": "search", "value": "", "disabled": true },
+                    { "key": "is_active", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('jenis_layanan_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456843",
+              "name": "Get Jenis Layanan",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/jenis-layanan/{{jenis_layanan_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "jenis-layanan", "{{jenis_layanan_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456844",
+              "name": "Create Jenis Layanan",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"CUCI-REG\", \"nama\": \"Cuci Reguler\", \"satuan\": \"kg\", \"harga\": 15000, \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/jenis-layanan",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "jenis-layanan"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('jenis_layanan_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456845",
+              "name": "Update Jenis Layanan",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"CUCI-REG\", \"nama\": \"Cuci Reguler Updated\", \"satuan\": \"kg\", \"harga\": 20000, \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/jenis-layanan/{{jenis_layanan_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "jenis-layanan", "{{jenis_layanan_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456846",
+              "name": "Delete Jenis Layanan",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/jenis-layanan/{{jenis_layanan_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "jenis-layanan", "{{jenis_layanan_id}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456850",
+          "name": "Komposisi Bahan",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456851",
+              "name": "List Komposisi Bahan",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/komposisi-bahan",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "komposisi-bahan"],
+                  "query": [
+                    { "key": "jenis_layanan_id", "value": "", "disabled": true },
+                    { "key": "bahan_baku_id", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('komposisi_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456852",
+              "name": "List by Jenis Layanan",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/komposisi-bahan/by-jenis-layanan/{{jenis_layanan_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "komposisi-bahan", "by-jenis-layanan", "{{jenis_layanan_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456853",
+              "name": "Get Komposisi Bahan",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/komposisi-bahan/{{komposisi_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "komposisi-bahan", "{{komposisi_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456854",
+              "name": "Create Komposisi Bahan",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"jenis_layanan_id\": \"{{jenis_layanan_id}}\", \"bahan_baku_id\": \"{{bahan_baku_id}}\", \"jumlah\": 0.05, \"satuan\": \"kg\"}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/komposisi-bahan",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "komposisi-bahan"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('komposisi_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456855",
+              "name": "Update Komposisi Bahan",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"jenis_layanan_id\": \"{{jenis_layanan_id}}\", \"bahan_baku_id\": \"{{bahan_baku_id}}\", \"jumlah\": 0.075, \"satuan\": \"kg\"}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/komposisi-bahan/{{komposisi_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "komposisi-bahan", "{{komposisi_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456856",
+              "name": "Delete Komposisi Bahan",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/komposisi-bahan/{{komposisi_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "komposisi-bahan", "{{komposisi_id}}"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456900",
+      "name": "Outlet & Supplier",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456910",
+          "name": "Outlets",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456911",
+              "name": "List Outlets",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/outlets",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "outlets"],
+                  "query": [
+                    { "key": "search", "value": "", "disabled": true },
+                    { "key": "is_active", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('outlet_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456913",
+              "name": "Get Outlet",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/outlets/{{outlet_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "outlets", "{{outlet_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456914",
+              "name": "Create Outlet",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"OUT-001\", \"nama\": \"WashHub Pusat\", \"alamat\": \"Jl. Merdeka No. 1\", \"telepon\": \"021-1234567\", \"email\": \"pusat@washhub.test\", \"pic_nama\": \"Budi\", \"pic_telepon\": \"08111111111\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/outlets",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "outlets"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('outlet_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456915",
+              "name": "Update Outlet",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"OUT-001\", \"nama\": \"WashHub Pusat Updated\", \"alamat\": \"Jl. Merdeka No. 1\", \"telepon\": \"021-1234567\", \"email\": \"pusat@washhub.test\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/outlets/{{outlet_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "outlets", "{{outlet_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456916",
+              "name": "Delete Outlet",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/outlets/{{outlet_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "outlets", "{{outlet_id}}"]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456920",
+          "name": "Suppliers",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456921",
+              "name": "List Suppliers",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/suppliers",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "suppliers"],
+                  "query": [
+                    { "key": "search", "value": "", "disabled": true },
+                    { "key": "is_active", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('supplier_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456923",
+              "name": "Get Supplier",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/suppliers/{{supplier_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "suppliers", "{{supplier_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456924",
+              "name": "Create Supplier",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"SUP-001\", \"nama\": \"PT. Deterjen Bersih\", \"kontak\": \"Andi\", \"telepon\": \"021-7654321\", \"email\": \"andi@deterjenbersih.test\", \"alamat\": \"Jl. Industri No. 10\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/suppliers",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "suppliers"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('supplier_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456925",
+              "name": "Update Supplier",
+              "request": {
+                "method": "PUT",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"kode\": \"SUP-001\", \"nama\": \"PT. Deterjen Bersih Updated\", \"kontak\": \"Andi\", \"telepon\": \"021-7654321\", \"email\": \"andi@deterjenbersih.test\", \"is_active\": true}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/suppliers/{{supplier_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "suppliers", "{{supplier_id}}"]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123456926",
+              "name": "Delete Supplier",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/suppliers/{{supplier_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "suppliers", "{{supplier_id}}"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457000",
+      "name": "Purchase Order",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457001",
+          "name": "List Purchase Orders",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders"],
+              "query": [
+                { "key": "search", "value": "", "disabled": true },
+                { "key": "supplier_id", "value": "", "disabled": true },
+                { "key": "outlet_id", "value": "", "disabled": true },
+                { "key": "status_id", "value": "", "disabled": true },
+                { "key": "status_slug", "value": "", "disabled": true },
+                { "key": "date_from", "value": "", "disabled": true },
+                { "key": "date_to", "value": "", "disabled": true }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "  pm.environment.set('po_id', jsonData.data.items[0].id);",
+                  "  if (jsonData.data.items[0].items && jsonData.data.items[0].items.length > 0) {",
+                  "    pm.environment.set('po_item_id', jsonData.data.items[0].items[0].id);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457002",
+          "name": "Get Purchase Order",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders/{{po_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders", "{{po_id}}"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457003",
+          "name": "Create Purchase Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"supplier_id\": \"{{supplier_id}}\", \"outlet_id\": \"{{outlet_id}}\", \"tanggal_pesan\": \"2024-06-01\", \"tanggal_diperlukan\": \"2024-06-07\", \"catatan\": \"PO pertama\", \"items\": [{\"bahan_baku_id\": \"{{bahan_baku_id}}\", \"kuantitas\": 50, \"harga_satuan\": 15000}]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "  pm.environment.set('po_id', jsonData.data.id);",
+                  "  if (jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "    pm.environment.set('po_item_id', jsonData.data.items[0].id);",
+                  "  }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457004",
+          "name": "Update Purchase Order",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"supplier_id\": \"{{supplier_id}}\", \"outlet_id\": \"{{outlet_id}}\", \"tanggal_pesan\": \"2024-06-01\", \"tanggal_diperlukan\": \"2024-06-10\", \"catatan\": \"PO diupdate\", \"items\": [{\"id\": \"{{po_item_id}}\", \"bahan_baku_id\": \"{{bahan_baku_id}}\", \"kuantitas\": 100, \"harga_satuan\": 14000}]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders/{{po_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders", "{{po_id}}"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457005",
+          "name": "Send Purchase Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders/{{po_id}}/send",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders", "{{po_id}}", "send"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457006",
+          "name": "Approve Purchase Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders/{{po_id}}/approve",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders", "{{po_id}}", "approve"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457007",
+          "name": "Reject Purchase Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders/{{po_id}}/reject",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders", "{{po_id}}", "reject"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457008",
+          "name": "Delete Purchase Order",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/purchase-orders/{{po_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "purchase-orders", "{{po_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457100",
+      "name": "Receiving",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457101",
+          "name": "List Receivings",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/receivings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "receivings"],
+              "query": [
+                { "key": "purchase_order_id", "value": "", "disabled": true },
+                { "key": "status_id", "value": "", "disabled": true }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "  pm.environment.set('receiving_id', jsonData.data.items[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457102",
+          "name": "Get Receiving",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/receivings/{{receiving_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "receivings", "{{receiving_id}}"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457103",
+          "name": "Create Receiving",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"purchase_order_id\": \"{{po_id}}\", \"tanggal_terima\": \"2024-06-03\", \"catatan\": \"Barang diterima\", \"items\": [{\"purchase_order_item_id\": \"{{po_item_id}}\", \"kuantitas_diterima\": 50}]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/receivings",
+              "host": ["{{base_url}}"],
+              "path": ["api", "receivings"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "  pm.environment.set('receiving_id', jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457104",
+          "name": "Delete Receiving",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/receivings/{{receiving_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "receivings", "{{receiving_id}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457200",
+      "name": "Distribution",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457201",
+          "name": "List Distributions",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/distributions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "distributions"],
+              "query": [
+                { "key": "outlet_id", "value": "", "disabled": true },
+                { "key": "status_id", "value": "", "disabled": true },
+                { "key": "status_slug", "value": "", "disabled": true }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "  pm.environment.set('distribution_id', jsonData.data.items[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457202",
+          "name": "Get Distribution",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/distributions/{{distribution_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["api", "distributions", "{{distribution_id}}"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457203",
+          "name": "Create Distribution",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"outlet_id\": \"{{outlet_id}}\", \"tanggal_distribusi\": \"2024-06-04\", \"catatan\": \"Distribusi bahan baku\", \"items\": [{\"bahan_baku_id\": \"{{bahan_baku_id}}\", \"kuantitas\": 10}]}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/distributions",
+              "host": ["{{base_url}}"],
+              "path": ["api", "distributions"]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.id) {",
+                  "  pm.environment.set('distribution_id', jsonData.data.id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457204",
+          "name": "Confirm Distribution",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/distributions/{{distribution_id}}/confirm",
+              "host": ["{{base_url}}"],
+              "path": ["api", "distributions", "{{distribution_id}}", "confirm"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457300",
+      "name": "Inventory",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457310",
+          "name": "Stock",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457311",
+              "name": "List Stock",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/stock",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "stock"],
+                  "query": [
+                    { "key": "outlet_id", "value": "", "disabled": true },
+                    { "key": "bahan_baku_id", "value": "", "disabled": true },
+                    { "key": "search", "value": "", "disabled": true }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457312",
+              "name": "Low Stock",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/stock/low-stock?outlet_id={{outlet_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "stock", "low-stock"],
+                  "query": [
+                    { "key": "outlet_id", "value": "{{outlet_id}}" }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457320",
+          "name": "Stock Mutasi",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457321",
+              "name": "List Mutasi",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/stock/mutasi",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "stock", "mutasi"],
+                  "query": [
+                    { "key": "outlet_id", "value": "", "disabled": true },
+                    { "key": "bahan_baku_id", "value": "", "disabled": true },
+                    { "key": "tipe", "value": "", "disabled": true },
+                    { "key": "date_from", "value": "", "disabled": true },
+                    { "key": "date_to", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('stock_mutasi_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457330",
+          "name": "Minimum Stock",
+          "item": [
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457331",
+              "name": "List Minimum Stock",
+              "request": {
+                "method": "GET",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/minimum-stock",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "minimum-stock"],
+                  "query": [
+                    { "key": "outlet_id", "value": "", "disabled": true },
+                    { "key": "bahan_baku_id", "value": "", "disabled": true }
+                  ]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                      "  pm.environment.set('minimum_stock_id', jsonData.data.items[0].id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457332",
+              "name": "Create Minimum Stock",
+              "request": {
+                "method": "POST",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" },
+                  { "key": "Content-Type", "value": "application/json", "type": "text" }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\"outlet_id\": \"{{outlet_id}}\", \"bahan_baku_id\": \"{{bahan_baku_id}}\", \"jumlah_minimum\": 20}",
+                  "options": { "raw": { "language": "json" } }
+                },
+                "url": {
+                  "raw": "{{base_url}}/api/minimum-stock",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "minimum-stock"]
+                }
+              },
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "var jsonData = pm.response.json();",
+                      "if (jsonData.data && jsonData.data.id) {",
+                      "  pm.environment.set('minimum_stock_id', jsonData.data.id);",
+                      "}"
+                    ],
+                    "type": "text/javascript"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457333",
+              "name": "Delete Minimum Stock",
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+                  { "key": "Accept", "value": "application/json", "type": "text" }
+                ],
+                "url": {
+                  "raw": "{{base_url}}/api/minimum-stock/{{minimum_stock_id}}",
+                  "host": ["{{base_url}}"],
+                  "path": ["api", "minimum-stock", "{{minimum_stock_id}}"]
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457400",
+      "name": "Notifications",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457401",
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications"],
+              "query": [
+                { "key": "unread_only", "value": "", "disabled": true },
+                { "key": "type", "value": "", "disabled": true }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.items && jsonData.data.items.length > 0) {",
+                  "  pm.environment.set('notification_id', jsonData.data.items[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457402",
+          "name": "Unread Count",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/notifications/unread-count",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "unread-count"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457403",
+          "name": "Mark Notification Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/notifications/{{notification_id}}/read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "{{notification_id}}", "read"]
+            }
+          }
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457404",
+          "name": "Mark All Read",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" },
+              { "key": "Content-Type", "value": "application/json", "type": "text" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/notifications/mark-all-read",
+              "host": ["{{base_url}}"],
+              "path": ["api", "notifications", "mark-all-read"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457500",
+      "name": "Status",
+      "item": [
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457501",
+          "name": "List Statuses",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/statuses",
+              "host": ["{{base_url}}"],
+              "path": ["api", "statuses"],
+              "query": [
+                { "key": "grup", "value": "", "disabled": true }
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.data && jsonData.data.length > 0) {",
+                  "  pm.environment.set('status_id', jsonData.data[0].id);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "id": "f1a2b3c4-d5e6-7890-abcd-ef0123457502",
+          "name": "Statuses by Group",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}", "type": "text" },
+              { "key": "Accept", "value": "application/json", "type": "text" }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/statuses/by-group/purchase_order",
+              "host": ["{{base_url}}"],
+              "path": ["api", "statuses", "by-group", "purchase_order"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
