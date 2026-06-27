@@ -32,18 +32,17 @@ const DashboardPage = () => {
         {
           title: 'Active Users',
           value: stats.kpi?.total_users?.toLocaleString() ?? '24,512',
-          change: '8.2%',
           changeType: 'up',
           icon: Users,
           iconColor: '#C46300',
           iconBg: '#fef3e2',
           sparklineType: 'wave',
           sparklineColor: '#C46300',
+          
         },
         {
           title: 'Total Permission',
           value: String(stats.user_stats?.total_permissions ?? '10'),
-          change: '1.1%',
           changeType: 'neutral',
           icon: ShieldCheck,
           iconColor: '#6377a2',
@@ -54,7 +53,6 @@ const DashboardPage = () => {
         {
           title: 'Total Role',
           value: String(stats.user_stats?.total_roles ?? '3'),
-          change: '99.9%',
           changeType: 'up',
           icon: Zap,
           iconColor: '#ef4444',
@@ -105,10 +103,8 @@ const DashboardPage = () => {
         </div>
       )}
 
-      {/* FAB button (matching reference) */}
-      <button className="fixed bottom-6 right-6 w-12 h-12 bg-[#2f74de] hover:bg-[#2563b0] text-white rounded-full shadow-lg flex items-center justify-center transition-colors z-20">
-        <Plus size={20} />
-      </button>
+      
+     
     </div>
   )
 }
