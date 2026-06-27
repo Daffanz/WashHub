@@ -1,8 +1,13 @@
-import api from '../api/axios';
+import api from './api'
 
-export const dashboardService = {
+const dashboardService = {
+  /**
+   * Get dashboard statistics
+   */
   getStats: async () => {
-    const response = await api.get('/dashboard/stats');
-    return response.data;
+    const response = await api.get('/dashboard/stats')
+    return response.data
   },
-};
+}
+
+export default dashboardService

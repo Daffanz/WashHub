@@ -1,135 +1,220 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { Droplets, Mail, Lock, Eye, EyeOff, ArrowRight } from 'lucide-react';
-import toast from 'react-hot-toast';
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Eye, EyeOff } from 'lucide-react'
+import { useAuth } from '../../context/AuthContext'
+import { useToast } from '../../components/common/Toast'
+import logoWashhub from '../../assets/logo_washhub.png'
 
-export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { login, user } = useAuth();
-  const navigate = useNavigate();
+const LoginPage = () => {
+  const navigate = useNavigate()
+  const { login } = useAuth()
+  const toast = useToast()
 
-  // Redirect if already logged in
-  if (user) {
-    navigate('/admin/dashboard', { replace: true });
-    return null;
+  const [form, setForm] = useState({ email: '', password: '' })
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState({})
+
+  const validate = () => {
+    const errs = {}
+    if (!form.email) errs.email = 'Email is required'
+    else if (!/\S+@\S+\.\S+/.test(form.email)) errs.email = 'Enter a valid email'
+    if (!form.password) errs.password = 'Password is required'
+    return errs
+  }
+
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }))
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+    e.preventDefault()
+    const errs = validate()
+    if (Object.keys(errs).length > 0) { setErrors(errs); return }
+
+    setLoading(true)
     try {
-      await login(email, password);
-      toast.success('Login successful! Welcome back.');
-      navigate('/admin/dashboard');
+      await login(form.email, form.password)
+      toast.success('Welcome back!')
+      navigate('/dashboard')
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed. Please try again.';
-      toast.error(message);
+      const message = err.response?.data?.message || 'Invalid credentials.'
+      toast.error(message)
+      setErrors({ general: message })
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
   return (
-    <div className="min-h-screen bg-navy-900 flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0">
-        <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-primary-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-accent-500/10 rounded-full blur-3xl" />
-      </div>
-
-      <div className="relative w-full max-w-md animate-slide-up">
-        {/* Logo */}
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 group">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Droplets className="w-7 h-7 text-white" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
-              WashHub
-            </span>
-          </Link>
-          <p className="text-surface-200 mt-3 text-sm">Sign in to your admin account</p>
-        </div>
-
-        {/* Login Card */}
-        <div className="glass-card rounded-2xl p-8">
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-surface-200 mb-2">Email Address</label>
-              <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-surface-700" />
-                <input
-                  id="login-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@washhub.com"
-                  required
-                  className="w-full pl-11 pr-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-surface-700 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all text-sm"
-                />
-              </div>
-            </div>
-
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-surface-200 mb-2">Password</label>
-              <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-surface-700" />
-                <input
-                  id="login-password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  required
-                  className="w-full pl-11 pr-11 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-surface-700 focus:outline-none focus:border-primary-500 focus:ring-1 focus:ring-primary-500 transition-all text-sm"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-surface-700 hover:text-surface-200 transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
-            {/* Submit */}
-            <button
-              id="login-submit"
-              type="submit"
-              disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-500 hover:to-accent-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <>Sign In <ArrowRight className="w-4 h-4" /></>
-              )}
-            </button>
-          </form>
-
-          {/* Demo credentials */}
-          <div className="mt-6 p-4 rounded-xl bg-primary-500/5 border border-primary-500/10">
-            <p className="text-xs text-surface-200 font-medium mb-2">Demo Credentials:</p>
-            <div className="space-y-1 text-xs text-surface-200">
-              <p><span className="text-primary-400">Admin:</span> admin@washhub.com / password</p>
-              <p><span className="text-amber-400">Manager:</span> manager@washhub.com / password</p>
-              <p><span className="text-emerald-400">Staff:</span> staff@washhub.com / password</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Back link */}
-        <p className="text-center mt-6 text-sm text-surface-200">
-          <Link to="/" className="text-primary-400 hover:text-primary-300 transition-colors">← Back to Homepage</Link>
+    <div
+      style={{
+        width: '100%',
+        maxWidth: '400px',
+        background: '#ffffff',
+        borderRadius: '12px',
+        padding: '32px',
+        boxShadow: '0 8px 30px rgba(0,0,0,0.08)',
+      }}
+    >
+      {/* Logo */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '24px' }}>
+        {/* ✅ Wrapper ramping — cukup untuk tampilkan logo */}
+        <img
+          src={logoWashhub}
+          alt="WashHub Logo"
+          style={{
+            width: '98px',
+            height: '98px',
+            objectFit: 'contain',
+            marginBottom: '12px',
+          }}
+        />
+        <h1 style={{ fontSize: '20px', fontWeight: 700, color: '#0f172a', margin: 0 }}>WashHub</h1>
+        <p style={{ fontSize: '13px', color: '#94a3b8', margin: '4px 0 0 0', textAlign: 'center' }}>
+          Silahkan masukkan username dan password anda
         </p>
       </div>
+
+      {errors.general && (
+        <div
+          style={{
+            background: '#fef2f2',
+            border: '1px solid #fecaca',
+            color: '#b91c1c',
+            fontSize: '13px',
+            padding: '10px 12px',
+            borderRadius: '8px',
+            marginBottom: '16px',
+          }}
+        >
+          {errors.general}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} noValidate>
+        {/* Email */}
+        <div style={{ marginBottom: '16px' }}>
+          <label
+            style={{
+              display: 'block',
+              fontSize: '13px',
+              fontWeight: 600,
+              color: '#0f172a',
+              marginBottom: '6px',
+            }}
+          >
+            Email
+          </label>
+          <input
+            name="email"
+            type="email"
+            placeholder="name@company.com"
+            value={form.email}
+            onChange={handleChange}
+            autoComplete="email"
+            style={{
+              width: '100%',
+              height: '40px',
+              padding: '0 12px',
+              fontSize: '13px',
+              border: errors.email ? '1px solid #ef4444' : '1px solid #e2e8f0',
+              borderRadius: '8px',
+              outline: 'none',
+              fontFamily: 'inherit',
+              background: '#ffffff',
+              color: '#0f172a',
+              boxSizing: 'border-box',
+            }}
+            onFocus={(e) => { if (!errors.email) e.target.style.borderColor = '#2f74de' }}
+            onBlur={(e) => { if (!errors.email) e.target.style.borderColor = '#e2e8f0' }}
+          />
+          {errors.email && (
+            <p style={{ fontSize: '12px', color: '#ef4444', margin: '4px 0 0 0' }}>{errors.email}</p>
+          )}
+        </div>
+
+        {/* Password */}
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+            <label style={{ fontSize: '13px', fontWeight: 600, color: '#0f172a' }}>Password</label>
+          </div>
+          <div style={{ position: 'relative' }}>
+            <input
+              name="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              value={form.password}
+              onChange={handleChange}
+              autoComplete="current-password"
+              style={{
+                width: '100%',
+                height: '40px',
+                padding: '0 36px 0 12px',
+                fontSize: '13px',
+                border: errors.password ? '1px solid #ef4444' : '1px solid #e2e8f0',
+                borderRadius: '8px',
+                outline: 'none',
+                fontFamily: 'inherit',
+                background: '#ffffff',
+                color: '#0f172a',
+                boxSizing: 'border-box',
+              }}
+              onFocus={(e) => { if (!errors.password) e.target.style.borderColor = '#2f74de' }}
+              onBlur={(e) => { if (!errors.password) e.target.style.borderColor = '#e2e8f0' }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '10px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: '#94a3b8',
+                padding: '4px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+            </button>
+          </div>
+          {errors.password && (
+            <p style={{ fontSize: '12px', color: '#ef4444', margin: '4px 0 0 0' }}>{errors.password}</p>
+          )}
+        </div>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            width: '100%',
+            height: '42px',
+            background: loading ? '#6c8ec5' : '#1c52b8',
+            color: '#ffffff',
+            fontSize: '13px',
+            fontWeight: 600,
+            border: 'none',
+            borderRadius: '8px',
+            cursor: loading ? 'not-allowed' : 'pointer',
+            fontFamily: 'inherit',
+            transition: 'background 0.15s ease',
+          }}
+          onMouseEnter={(e) => { if (!loading) e.target.style.background = '#1742a3' }}
+          onMouseLeave={(e) => { if (!loading) e.target.style.background = '#1c52b8' }}
+        >
+          {loading ? 'Signing in...' : 'Sign In'}
+        </button>
+      </form>
     </div>
-  );
+  )
 }
+
+export default LoginPage

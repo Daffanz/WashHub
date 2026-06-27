@@ -1,323 +1,550 @@
-Prompt Utama
+Backend PRD WashHub (Modul 1–4)
+Bagian 1
+Executive Summary
+Scope
+Existing System Analysis
+Tech Stack
+Project Architecture
+Authentication Existing (Laravel Auth + Sanctum)
+Spatie Permission Existing
+Admin Panel Existing
+Folder Structure
+Bagian 2
 
-Buatkan project fullstack bernama WashHub menggunakan:
+Analisis Database
 
-Frontend: React + Vite
-Backend: Laravel REST API
-Database: MySQL
-Authentication: Laravel Sanctum / JWT
-Styling: TailwindCSS
-State Management: React Context / Redux Toolkit
-HTTP Client: Axios
-Architecture Backend: Repository Pattern + Service Layer
-Struktur project harus clean architecture dan mudah dibaca
-Gunakan naming convention yang konsisten
-Pisahkan folder berdasarkan responsibility
-Tujuan Sistem
+Setiap tabel dijelaskan:
 
-WashHub adalah sistem manajemen franchise laundry yang mengintegrasikan:
+Purpose
+Relation
+Constraint
+Business Rule
+CRUD yang menggunakannya
+Index yang diperlukan
 
-Manajemen supplier
-Pengadaan bahan
-Operasional laundry
-Monitoring outlet franchise
-Dashboard KPI pusat
+Misalnya
 
-Tahap pertama yang dibuat hanya:
+purchase_order
 
-Landing Page
-Admin Panel
-Scope Tahap Pertama
-Landing Page
+Purpose:
+Menyimpan header Purchase Order.
 
-Buat landing page modern, clean, responsive, dan profesional untuk sistem franchise laundry.
+Relation:
+purchase_order_item_bahan_baku
+purchase_order_item_mesin
+status
 
-Section Landing Page
-1. Navbar
+Business Rule:
+- Draft dapat diedit
+- Dikirim tidak dapat diedit
+- Harus memiliki minimal 1 item sebelum dikirim
+Bagian 3
 
-Menu:
+Status Master
 
-Home
-Features
-About
-Contact
-Login
+Semua status akan dibuatkan mapping.
 
-Navbar sticky dengan efek blur saat scroll.
+Misalnya
 
-2. Hero Section
+STATUS PURCHASE ORDER
 
-Isi:
+DRAFT
 
-Headline:
-"Smart Franchise Laundry Management System"
-Subheadline:
-"Mengintegrasikan operasional laundry, supplier, franchise, dan monitoring outlet dalam satu platform terpusat."
-CTA Button:
-Get Started
-View Demo
+DIKIRIM
 
-Tambahkan ilustrasi dashboard modern.
+DITERIMA_SUPPLIER
 
-3. Features Section
+DITOLAK_SUPPLIER
 
-Tampilkan card fitur:
+SELESAI
+STATUS MESIN
 
-Supplier Management
-Inventory Management
-Laundry Operations
-Franchise Monitoring
-KPI Dashboard
-Reporting & Analytics
+DI_GUDANG
 
-Gunakan icon modern.
+DIKIRIM
 
-4. About Section
+AKTIF
 
-Jelaskan tujuan WashHub:
+SERVICE
 
-Standardisasi operasional franchise
-Monitoring outlet real-time
-Efisiensi supply chain
-Kontrol kualitas layanan
-5. Statistics Section
+RUSAK
 
-Contoh statistik:
+dan seterusnya.
 
-10+ Franchise Outlet
-95% Stock Accuracy
-40% Faster Procurement
-Real-time KPI Monitoring
-6. CTA Section
+Bagian 4
 
-Ajakan menggunakan sistem:
-"Transform Your Laundry Franchise Management"
+Modul 1
 
-7. Footer
+Untuk setiap fitur akan dibuat:
 
-Isi:
+Flow
+Business Rules
+Validation
+API
+Permission
+Database
+Service
+Repository
+Transaction
+Error Handling
+Response JSON
+Bagian 5
 
-Company Info
-Quick Links
-Contact
-Social Media
-Admin Panel
+Modul 2
 
-Buat admin dashboard modern seperti SaaS ERP.
+Master Data
 
-Layout Admin
+Kategori
+Bahan Baku
+Mesin
+Jenis Layanan
+Komposisi Bahan
 
-Gunakan struktur:
+Semuanya lengkap.
 
-Sidebar
-Topbar
-Main Content
-Breadcrumb
-Responsive drawer
-Menu Sidebar
-Dashboard
-KPI Cards
-Revenue Chart
-Outlet Performance
-Recent Activity
-Supplier Management
-Supplier List
-Add/Edit/Delete Supplier
+Bagian 6
+
+Modul 3
+
+Purchase Order
+
+Receiving
+
+Distribution
+
+Stock Update
+
+Flow lengkap.
+
+Bagian 7
+
+Modul 4
+
 Inventory
-Material Stock
-Incoming Goods
-Stock History
-Laundry Operations
-Washing Process
-Machine Status
-Service Schedule
-Franchise Management
-Outlet List
-Franchise Contract
-Royalty Monitoring
-Reports
-Operational Reports
-KPI Reports
-Export PDF/Excel
-User Management
-Admin
-Staff Outlet
-Roles & Permissions
-Settings
-Profile
-System Settings
-Backend Laravel Requirements
 
-Gunakan:
+Mutasi
 
-Laravel terbaru
-REST API
-Repository Pattern
+Minimum Stock
+
+Notification
+
+Bagian 8
+
+API Documentation
+
+Semua endpoint.
+
+Contoh
+
+POST
+
+/api/purchase-orders
+GET
+
+/api/purchase-orders
+PATCH
+
+/api/purchase-orders/{id}/send
+
+dst.
+
+Lengkap dengan
+
+Request
+
+Response
+
+Validation
+
+Permission
+
+Bagian 9
+
 Service Layer
-Request Validation
-API Resource
-Middleware Auth
-Role Permission
-Struktur Backend
 
-Gunakan struktur berikut:
+Contoh
 
-app/
-├── Http/
-│   ├── Controllers/
-│   ├── Requests/
-│   ├── Resources/
-│
-├── Models/
-│
-├── Repositories/
-│   ├── Interfaces/
-│   ├── Implementations/
-│
-├── Services/
-│
-├── Traits/
-│
-├── Helpers/
-Struktur Frontend React
+PurchaseOrderService
 
-Gunakan struktur berikut:
+create()
 
-src/
-├── api/
-├── assets/
-├── components/
-│   ├── ui/
-│   ├── forms/
-│   ├── cards/
-│   ├── tables/
-│
-├── layouts/
-│   ├── LandingLayout/
-│   ├── AdminLayout/
-│
-├── pages/
-│   ├── landing/
-│   ├── admin/
-│
-├── routes/
-├── hooks/
-├── context/
-├── services/
-├── utils/
-├── constants/
-├── types/
-Routing React
+update()
 
-Gunakan React Router dengan route:
+addItem()
 
-/
-/about
-/contact
-/login
+send()
 
-/admin/dashboard
-/admin/suppliers
-/admin/inventory
-/admin/operations
-/admin/franchise
-/admin/reports
-/admin/users
-/admin/settings
-UI Requirements
+approve()
 
-Gunakan:
+reject()
 
-TailwindCSS
-Dark mode support
-Reusable component
-Clean card design
-Soft shadow
-Rounded modern UI
-Responsive mobile-first
-Skeleton loading
-Toast notification
-Dashboard Requirements
+dst.
 
-Dashboard admin harus memiliki:
+Bagian 10
 
-KPI cards
-Revenue analytics chart
-Outlet activity
-Machine status monitoring
-Inventory alerts
-Franchise performance table
+Laravel Transaction
 
-Gunakan:
+Semua transaksi yang wajib menggunakan
 
-Recharts / ApexCharts
-Authentication
+DB::transaction()
 
-Buat:
+Misalnya
 
-Login
-Logout
-Protected Routes
-Role-based Access
+Receiving Barang
 
-Role:
+↓
 
-Super Admin
-Franchise Manager
-Outlet Staff
-API Standard
+Insert Header
 
-Gunakan response format:
+↓
 
-{
-  "success": true,
-  "message": "Data retrieved successfully",
-  "data": []
-}
+Insert Detail
 
-Error format:
+↓
 
-{
-  "success": false,
-  "message": "Validation failed",
-  "errors": {}
-}
-Coding Standard
+Update Stock
 
-Wajib:
+↓
 
-SOLID Principle
-DRY
-Clean Code
-Reusable Components
-Consistent naming
-Service abstraction
-No hardcoded values
-Use environment config
-Use constants folder
-Output yang Diharapkan
+Insert Mutasi
 
-Generate:
+↓
 
-Struktur folder project lengkap
-Setup backend Laravel
-Setup frontend React
-Landing page modern
-Admin dashboard modern
-API authentication
-Dummy data dashboard
-Responsive UI
-Reusable component architecture
-Base repository implementation
-Tambahan Penting
-Pisahkan layout ke folder layouts
-Pisahkan reusable component
-Gunakan custom hooks
-Gunakan service untuk API call
-Gunakan repository untuk database logic
-Jangan campur business logic di controller
-gunakan request folder
-Controller hanya menangani logika bisnis saja
-Semua logic bisnis masuk ke service
-Query database melalui repository
-web harus responsive semua device
+Commit
+
+Rollback jika gagal.
+
+Bagian 11
+
+Event & Listener
+
+Misalnya
+
+PurchaseOrderSent
+
+↓
+
+Send Notification
+GoodsReceived
+
+↓
+
+Update Stock
+DistributionConfirmed
+
+↓
+
+Update Outlet Stock
+Bagian 12
+
+Permission Spatie
+
+Role
+
+IT
+
+Permission
+
+user.create
+
+user.update
+
+user.delete
+
+Role
+
+Tim Pengadaan
+
+Permission
+
+supplier.*
+
+purchase-order.*
+
+receiving.*
+
+distribution.*
+
+stock.view
+
+Role
+
+Supplier
+
+Permission
+
+purchase-order.view-own
+
+purchase-order.approve
+
+purchase-order.reject
+
+Role
+
+Franchisor
+
+Permission
+
+master.*
+
+service.*
+
+machine.*
+
+
+Semua permission akan dibuat satu per satu.
+
+Bagian 13
+
+Seeder
+
+Nah ini menurut saya WAJIB.
+
+Jadi bukan cuma migration.
+
+Saya akan buatkan seluruh seeder.
+
+Contoh
+
+RoleSeeder
+IT
+
+Franchisor
+
+Tim Pengadaan
+
+Supplier
+
+Manajer Outlet
+PermissionSeeder
+
+Semua permission Spatie.
+
+Kurang lebih 70–100 permission.
+
+StatusSeeder
+
+Misalnya
+
+purchase_order
+
+DRAFT
+
+DIKIRIM
+
+DITERIMA
+
+DITOLAK
+
+SELESAI
+outlet
+
+AKTIF
+
+NONAKTIF
+mesin
+
+DI_GUDANG
+
+DIKIRIM
+
+AKTIF
+
+SERVICE
+
+RUSAK
+OutletSeeder
+Pusat
+
+Outlet Surabaya
+
+Outlet Malang
+
+Outlet Sidoarjo
+KategoriBahanSeeder
+Detergen
+
+Pewangi
+
+Pembersih
+
+Pengemas
+BahanBakuSeeder
+
+Contoh data awal.
+
+Detergen Liquid
+
+Softener
+
+Pewangi Sakura
+
+Kantong Laundry
+
+Label
+MesinSeeder
+Mesin Cuci 15 Kg
+
+Mesin Cuci 20 Kg
+
+Dryer
+
+Steam Boiler
+JenisLayananSeeder
+Cuci Reguler
+
+Cuci Express
+
+Dry Cleaning
+
+Setrika
+JenisLayananBahanSeeder
+
+Sekalian dibuatkan komposisinya.
+
+Misalnya
+
+Cuci Reguler
+
+Detergen
+
+0.02
+
+Softener
+
+0.01
+AdminSeeder
+
+Sudah ada.
+
+Kalau belum saya tambahkan.
+
+Bagian 14
+
+Postman Collection
+
+Ini juga saya buatkan.
+
+Bukan hanya list endpoint.
+
+Tetapi langsung file
+
+WashHub Backend.postman_collection.json
+
+Berisi
+
+Folder
+
+Auth
+
+Master
+
+Supplier
+
+Purchase Order
+
+Receiving
+
+Distribution
+
+Stock
+
+Di dalamnya sudah ada:
+
+✅ Login
+
+✅ Refresh Token (jika ada)
+
+✅ Semua CRUD
+
+✅ Kirim PO
+
+✅ Approve PO
+
+✅ Reject PO
+
+✅ Receive Barang
+
+✅ Distribusi
+
+✅ Konfirmasi Outlet
+
+Semua menggunakan variable.
+
+Misalnya
+
+{{base_url}}
+
+{{token}}
+
+{{supplier_id}}
+
+{{po_id}}
+
+{{outlet_id}}
+
+Jadi tinggal import.
+
+Bagian 15
+
+Environment Postman
+
+Saya juga akan buatkan
+
+WashHub.postman_environment.json
+
+Isi
+
+base_url
+
+token
+
+admin_token
+
+supplier_token
+
+po_id
+
+supplier_id
+
+outlet_id
+
+Jadi tidak perlu edit manual.
+
+Bagian 16
+
+Test Case API
+
+Ini yang sering dilupakan.
+
+Saya akan buatkan tabel pengujian seperti berikut.
+
+No	Endpoint	Skenario	Expected
+1	POST /login	Login valid	200
+2	POST /login	Password salah	401
+3	POST /supplier	Nama kosong	422
+4	POST /supplier	Berhasil	201
+5	POST /purchase-orders	Tanpa item	422
+6	PATCH /purchase-orders/send	Berhasil	200
+7	PATCH /purchase-orders/send	Status bukan Draft	400
+8	PATCH /purchase-orders/{id}/approve	Supplier lain mencoba approve	403
+9	POST /receiving	Qty melebihi PO	422
+10	POST /distribution	Stok pusat tidak cukup	422
+11	PATCH /distribution/{id}/confirm	Berhasil	200
+
+Targetnya sekitar 100–150 test case yang mencakup seluruh Modul 1–4, termasuk validasi, otorisasi (Spatie), alur bisnis, dan skenario gagal.
+
+Deliverables akhir
+
+Dokumen yang dihasilkan akan terdiri dari:
+
+Backend PRD + Technical Design Document (TDD) (±150–250 halaman jika diekspor ke PDF).
+ERD final yang sudah disesuaikan dengan Modul 1–4.
+Database schema & migration mapping.
+Seeder plan beserta data master awal (roles, permissions, status, outlet, kategori, bahan baku, mesin, jenis layanan, dan komposisi).
+Spatie Role & Permission matrix.
+REST API Specification lengkap.
+Postman Collection (.postman_collection.json) siap diimpor.
+Postman Environment (.postman_environment.json).
+API Test Case lengkap (happy path, validation, authorization, dan business rule).
+Development checklist & roadmap sehingga backend bisa dikerjakan modul demi modul tanpa perlu mengubah desain di tengah jalan.

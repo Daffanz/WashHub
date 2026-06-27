@@ -8,42 +8,68 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Create Super Admin
-        $superAdmin = User::create([
-            'name' => 'Super Admin',
-            'email' => 'admin@washhub.com',
+        // IT - Full access
+        $it = User::create([
+            'name' => 'IT Admin',
+            'email' => 'it@washhub.com',
             'password' => Hash::make('password'),
             'phone' => '081234567890',
             'is_active' => true,
+            'outlet_id' => 1, // Pusat
             'email_verified_at' => now(),
         ]);
-        $superAdmin->assignRole('Super Admin');
+        $it->assignRole('IT');
 
-        // Create Franchise Manager
-        $manager = User::create([
-            'name' => 'John Manager',
-            'email' => 'manager@washhub.com',
+        // Franchisor
+        $franchisor = User::create([
+            'name' => 'Franchisor Manager',
+            'email' => 'franchisor@washhub.com',
             'password' => Hash::make('password'),
             'phone' => '081234567891',
             'is_active' => true,
+            'outlet_id' => 1,
             'email_verified_at' => now(),
         ]);
-        $manager->assignRole('Franchise Manager');
+        $franchisor->assignRole('Franchisor');
 
-        // Create Outlet Staff
-        $staff = User::create([
-            'name' => 'Jane Staff',
-            'email' => 'staff@washhub.com',
+        // Tim Pengadaan
+        $pengadaan = User::create([
+            'name' => 'Budi Pengadaan',
+            'email' => 'pengadaan@washhub.com',
             'password' => Hash::make('password'),
             'phone' => '081234567892',
             'is_active' => true,
+            'outlet_id' => 1,
             'email_verified_at' => now(),
         ]);
-        $staff->assignRole('Outlet Staff');
+        $pengadaan->assignRole('Tim Pengadaan');
+
+        // Supplier
+        $supplier = User::create([
+            'name' => 'Supplier A',
+            'email' => 'supplier@washhub.com',
+            'password' => Hash::make('password'),
+            'phone' => '081234567893',
+            'is_active' => true,
+            'outlet_id' => null,
+            'email_verified_at' => now(),
+        ]);
+        $supplier->assignRole('Supplier');
+
+        // Manajer Outlet Surabaya
+        $manajerSby = User::create([
+            'name' => 'Sari Outlet',
+            'email' => 'outlet@washhub.com',
+            'password' => Hash::make('password'),
+            'phone' => '081234567894',
+            'is_active' => true,
+            'outlet_id' => 2, // Surabaya
+            'email_verified_at' => now(),
+        ]);
+        $manajerSby->assignRole('Manajer Outlet');
+
+        $this->command->info('Admin users seeded successfully.');
     }
 }
