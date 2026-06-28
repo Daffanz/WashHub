@@ -16,7 +16,7 @@ class PermissionController extends Controller
 
     public function index(): JsonResponse
     {
-        $permissions = Permission::orderBy('name')->get();
+        $permissions = Permission::withCount('roles')->orderBy('name')->get();
         return $this->successResponse(PermissionResource::collection($permissions), 'Permissions retrieved successfully');
     }
 
