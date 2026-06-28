@@ -52,6 +52,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('washhub_user', JSON.stringify(updatedUser))
   }, [])
 
+  const hasPermission = useCallback((permission) => {
+    if (!user) return false
+    if (user.roles?.some(r => r.name === 'IT')) return true
+    return user.permissions?.includes(permission) || false
+  }, [user])
+
   const isAuthenticated = Boolean(token && user)
 
   const value = {
@@ -62,6 +68,7 @@ export const AuthProvider = ({ children }) => {
     login,
     logout,
     updateUser,
+    hasPermission,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
